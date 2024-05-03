@@ -3,10 +3,10 @@ E,0,ITE 11,Advanced Networking,3,1
 E,0,ITE 12,Advanced System Administration,3,0
 E,0,ITE 13,Advanced Web Technologies,2,1
 E,0,ITE 14,UX Concepts and Design,3,0
-E,0,ITE 15,IT Security Manaagement,3,0
+E,0,ITE 15,IT Security Management,3,0
 E,0,ITE 16,Data Warehouse,3,0
-E,0,ITE 17,Data Minining,2,1
-E,0,ITE 18,Advanced Applications Develpoment,2,1
+E,0,ITE 17,Data Mining,2,1
+E,0,ITE 18,Advanced Applications Development,2,1
 E,0,ITE 19,Knowledge Management,3,0
 E,0,ITE 20,IT Project Planning and Management,3,0
 E,0,ITE 21,Advanced Software Engineering,3

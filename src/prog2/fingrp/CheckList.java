@@ -127,8 +127,7 @@ private String program;
             case 7:
 
                 break;
-            case 8:
-
+            case 8:test.displayGradesDescending();
                 break;
             case 9:
                 int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to exit?", "Confirm Exit", JOptionPane.YES_NO_OPTION);

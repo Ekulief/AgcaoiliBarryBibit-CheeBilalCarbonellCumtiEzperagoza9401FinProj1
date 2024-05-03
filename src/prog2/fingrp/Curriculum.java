@@ -13,6 +13,7 @@ public class Curriculum implements Serializable{
     protected String name;
     protected String program;
     protected ArrayList<Course> courses;
+    protected ArrayList<PreRequisites> preRequisites;
     private transient Scanner scan;
     private final String FILE_NAME;
     private final String DATA_FILE_LOCATION = "C:\\DEMOS JAVA\\AgcaoiliBarryBibit-CheeBilalCarbonellCumtiEzperagoza9401FinProj1\\Data\\"; // temporary Storage
@@ -73,7 +74,7 @@ public class Curriculum implements Serializable{
     private void initializeSerializedFile() throws IOException, ClassNotFoundException {
         Curriculum c = deserialize(FILE_NAME);
         this.courses = c.courses;
-
+        this.preRequisites = c.preRequisites;
     }
 
     private void initializeNewCurrculum() {
@@ -240,6 +241,38 @@ public class Curriculum implements Serializable{
         return true;
     }
 
+    public void displayGradesDescending() {
+        // Sort the courses in descending order of grades
+        Collections.sort(courses, (c1, c2) -> Float.compare(c2.getGrade(), c1.getGrade()));
+
+        // Create a StringBuilder to store the information
+        StringBuilder gradesInfo = new StringBuilder();
+        // Create a JTextArea to display the information
+        JTextArea textArea = new JTextArea(30, 150);
+        textArea.setEditable(false);
+        textArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+
+        // Compare grades in descending order
+
+        gradesInfo.append("Name:").append(name.toUpperCase());
+        gradesInfo.append(" Program:").append(program.toUpperCase());
+        gradesInfo.append("\n");
+        gradesInfo.append(String.format("%-20s%-85s%-15s%-20s%5s%n", "Course Number", "Course",  "Grade", "Remarks", ""));
+        gradesInfo.append(String.format("%-20s%-85s%-15s%-20s%5s%n", "---------------", "---------------------------------------------------", "-------", "-------------", ""));
+
+        // Append each course's information to the StringBuilder
+        for (Course course : courses) {
+            gradesInfo.append(String.format("%-20s%-85s%-15s%-20s%5s%n", course.getCourseNo(), course.getCourseName(), course.getGrade(), course.getRemarks(), ""));
+        }
+        textArea.setText(gradesInfo.toString());
+
+        // Create a scroll pane for the JTextArea
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        // Display the information in a JOptionPane
+        JOptionPane.showMessageDialog(null, scrollPane, "Grades from Highest to Lowest", JOptionPane.PLAIN_MESSAGE);
+    }
 
     public void editCourse(String courseNoToEdit, String newCourse) {
         int i = search(courseNoToEdit);
@@ -248,7 +281,7 @@ public class Curriculum implements Serializable{
         Course course = courses.get(i);
         course.setCourseNo(newData[0]);
         course.setCourseName(newData[1]);
-        course.setUnit(Byte.parseByte(newData[2]));
+        course.setUnit1(Byte.parseByte(newData[2]));
         courses.set(i,course);
     }
 
@@ -278,26 +311,13 @@ public class Curriculum implements Serializable{
     }
 
 
-  public final Search getIndexofCourseNo = s1 -> search(s1, AbstractCourse::getCourseNo);
-    public final Search getIndexofCourseName = s1 -> search(s1, AbstractCourse::getCourseName);
 
-    private int search(String searchValue1, CourseProperty<String> searchProperty2){
-        for(int i = 0; i < courses.size(); i++)
-            if(searchValue1.equals(searchProperty2.getCourse(courses.get(i)))) return i;
-
-        return -1;
-
-
-    }
-    private boolean isValidGrade(float grade) {
-        return grade >= 0 && grade <= 99;
-    }
     public void editGrade(){
         JFrame frame = new JFrame("Edit Grade");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, 200);
         frame.setLayout(new BorderLayout());
-
+        frame.setLocationRelativeTo(null);
 
 
         JPanel panel = new JPanel(new GridBagLayout());
@@ -378,8 +398,19 @@ public class Curriculum implements Serializable{
         }
     }
 
+    //INCOMPLETE
+    public final Search getIndexofCourseNo = s1 -> search(s1, AbstractCourse::getCourseNo);
+    public final Search getIndexofCourseName = s1 -> search(s1, AbstractCourse::getCourseName);
 
-    private boolean checkPrerequisite(String courseId){
+    private int search(String searchValue1, CourseProperty<String> searchProperty2){
+        for(int i = 0; i < courses.size(); i++)
+            if(searchValue1.equals(searchProperty2.getCourse(courses.get(i)))) return i;
+
+        return -1;
+    }
+
+    private boolean checkPrerequisite(String courseId){ //INCOMPLETE
+
         int index = getIndexofCourseNo.find(courseId);
         Course c = courses.get(index);
         return c.getGrade() > 75 && c.getGrade() < 100;
@@ -411,6 +442,9 @@ public class Curriculum implements Serializable{
     public void shiftProgram(String program) {
 
     }
+
+
+
     // Serialize the object to a file
     public void saveFile() {
         try {
@@ -440,41 +474,8 @@ public class Curriculum implements Serializable{
 }
 
 
-  /*private ArrayList<Course> deserializeCourses(String filename) throws IOException, ClassNotFoundException {
-        ArrayList<Course> courses = new ArrayList<>();
-        try (FileInputStream inputStream = new FileInputStream(DATA_FILE_LOCATION + filename);
-             ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)) {
-            while (true) {
-                try {
-                    Course course = (Course) objectInputStream.readObject();
-                    courses.add(course);
-                } catch (EOFException e) {
-
-                    break;
-                }
-            }
-        }
-        return courses;
-    }
-*/
 
 
 
 
 
-
-
-   /* private int countFileLines() {
-        int lines = 0;
-        try {
-            scan = new Scanner(new File(COURSE_CURRICULUM_REFERENCE_LOCATION + program.toLowerCase()+".txt"));
-            while (scan.hasNextLine()) {
-                lines++;
-                scan.nextLine();
-            }
-            scan.close();
-        } catch (NumberFormatException | FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        return lines;
-    } */
